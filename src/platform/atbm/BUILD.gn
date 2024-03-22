@@ -24,6 +24,8 @@ declare_args() {
   chip_use_factory_data_provider = false
   chip_use_device_info_provider = false
   chip_config_software_version_number = 0
+  #WZG NEW ADD
+  chip_enable_chipoble = false
   chip_use_secure_cert_dac_provider = false
   chip_use_atbm_ecdsa_peripheral = false
 }
@@ -83,6 +85,13 @@ static_library("atbm") {
     "${chip_root}/src/platform:platform_base",
   ]
 
+  #WZG NEW ADD
+  if (chip_enable_chipoble) {
+    sources += [
+      "BLEManagerImpl.h",
+      "ChipDeviceScanner.h",
+    ]
+  }
   if (chip_mdns == "platform") {
     sources += [
       "DnssdImpl.cpp",

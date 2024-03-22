@@ -52,7 +52,7 @@ void CommonDeviceCallbacks::DeviceEventCallback(const ChipDeviceEvent * event, i
         break;
 
     case DeviceEventType::kDnssdInitialized:
-	ChipLogProgress(DeviceLayer, "Dnssd Initialized");
+        ChipLogProgress(DeviceLayer, "Dnssd Initialized");
 #if CONFIG_ENABLE_OTA_REQUESTOR
         OTAHelpers::Instance().InitOTARequestor();
 #endif

@@ -50,15 +50,11 @@ CHIP_ERROR LoadKeypairFromRaw(ByteSpan privateKey, ByteSpan publicKey, Crypto::P
 
 CHIP_ERROR ATBMSecureCertDACProvider ::GetCertificationDeclaration(MutableByteSpan & outBuffer)
 {
-#ifdef CONFIG_ENABLE_SET_CERT_DECLARATION_API
-    return CopySpanToMutableSpan(mCD, outBuffer);
-#else
     size_t certSize;
     ReturnErrorOnFailure(
         ATBMConfig::ReadConfigValueBin(ATBMConfig::kConfigKey_CertDeclaration, outBuffer.data(), outBuffer.size(), certSize));
     outBuffer.reduce_size(certSize);
     return CHIP_NO_ERROR;
-#endif // CONFIG_ENABLE_SET_CERT_DECLARATION_API
 }
 
 CHIP_ERROR ATBMSecureCertDACProvider ::GetFirmwareInformation(MutableByteSpan & out_firmware_info_buffer)

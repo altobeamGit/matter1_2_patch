@@ -27,7 +27,6 @@
 #include <lib/support/logging/CHIPLogging.h>
 #include <platform/DeviceInstanceInfoProvider.h>
 #include <platform/DiagnosticDataProvider.h>
-#include <platform/atbm/ATBMEndpointQueueFilter.h>
 #include <platform/atbm/ATBMUtils.h>
 #include <platform/atbm/NetworkCommissioningDriver.h>
 #include <platform/atbm/route_hook/atbm_route_hook.h>
@@ -102,16 +101,12 @@ void ConnectivityManagerImpl::_ClearWiFiStationProvision(void)
 {
     if (mWiFiStationMode != kWiFiStationMode_ApplicationControlled)
     {
-    	#if 1
         CHIP_ERROR error = chip::DeviceLayer::Internal::ATBMUtils::ClearWiFiStationProvision();
         if (error != CHIP_NO_ERROR)
         {
             ChipLogError(DeviceLayer, "ClearWiFiStationProvision failed: %s", chip::ErrorStr(error));
             return;
         }
-		#else
-        atbm_wifi_clear_config();
-		#endif
         DeviceLayer::SystemLayer().ScheduleWork(DriveStationState, NULL);
 #if CHIP_DEVICE_CONFIG_ENABLE_WIFI_AP
         DeviceLayer::SystemLayer().ScheduleWork(DriveAPState, NULL);
@@ -677,16 +672,8 @@ void ConnectivityManagerImpl::UpdateInternetConnectivityState(void)
     }
 }
 
-void ConnectivityManagerImpl::OnStationIPv4AddressAvailable(void)//(const ip_event_got_ip_t & got_ip)
+void ConnectivityManagerImpl::OnStationIPv4AddressAvailable(void)
 {
-#if 0//CHIP_PROGRESS_LOGGING
-    {
-        ChipLogProgress(DeviceLayer, "IPv4 address %s on WiFi station interface: " IPSTR "/" IPSTR " gateway " IPSTR,
-                        (got_ip.ip_changed) ? "changed" : "ready", IP2STR(&got_ip.ip_info.ip), IP2STR(&got_ip.ip_info.netmask),
-                        IP2STR(&got_ip.ip_info.gw));
-    }
-#endif // CHIP_PROGRESS_LOGGING
-
     UpdateInternetConnectivityState();
 
     ChipDeviceEvent event;
@@ -707,7 +694,7 @@ void ConnectivityManagerImpl::OnStationIPv4AddressLost(void)
     PlatformMgr().PostEventOrDie(&event);
 }
 
-void ConnectivityManagerImpl::OnStationIPv6AddressAvailable(void)//(const ip_event_got_ip6_t & got_ip)
+void ConnectivityManagerImpl::OnStationIPv6AddressAvailable(void)
 {
     UpdateInternetConnectivityState();
 
@@ -716,34 +703,11 @@ void ConnectivityManagerImpl::OnStationIPv6AddressAvailable(void)//(const ip_eve
     event.InterfaceIpAddressChanged.Type = InterfaceIpChangeType::kIpV6_Assigned;
     PlatformMgr().PostEventOrDie(&event);
 
-#if CONFIG_ENABLE_ENDPOINT_QUEUE_FILTER
-	uint8_t station_mac[6];
-	atbm_wifi_get_mac_addr(&station_mac);
-
-	static chip::Inet::ATBMEndpointQueueFilter sEndpointQueueFilter;
-	char station_mac_str[12];
-	for (size_t i = 0; i < 6; ++i)
-	{
-		uint8_t dig1			   = (station_mac[i] & 0xF0) >> 4;
-		uint8_t dig2			   = station_mac[i] & 0x0F;
-		station_mac_str[2 * i]	   = static_cast<char>(dig1 > 9 ? ('A' + dig1 - 0xA) : ('0' + dig1));
-		station_mac_str[2 * i + 1] = static_cast<char>(dig2 > 9 ? ('A' + dig2 - 0xA) : ('0' + dig2));
-	}
-	if (sEndpointQueueFilter.SetMdnsHostName(chip::CharSpan(station_mac_str)) == CHIP_NO_ERROR)
-	{
-		chip::Inet::UDPEndPointImpl::SetQueueFilter(&sEndpointQueueFilter);
-	}
-	else
-	{
-		ChipLogError(DeviceLayer, "Failed to set mDNS hostname for endpoint queue filter");
-	}
-#endif // CONFIG_ENABLE_ENDPOINT_QUEUE_FILTER
-
 #if CONFIG_ENABLE_ROUTE_HOOK
-	if (atbm_route_hook_init() != 0)
-	{
-		ChipLogError(DeviceLayer, "atbm_route_hook_init failed");
-	}
+    if (atbm_route_hook_init() != 0)
+    {
+        ChipLogError(DeviceLayer, "atbm_route_hook_init failed");
+    }
 #endif
 }
 

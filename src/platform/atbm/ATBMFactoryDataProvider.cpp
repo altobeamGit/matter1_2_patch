@@ -122,15 +122,11 @@ CHIP_ERROR ATBMFactoryDataProvider::GetDeviceAttestationCert(MutableByteSpan & o
 
 CHIP_ERROR ATBMFactoryDataProvider::GetProductAttestationIntermediateCert(MutableByteSpan & outBuffer)
 {
-#ifdef CONFIG_ENABLE_SET_CERT_DECLARATION_API
-	return CopySpanToMutableSpan(mCD, outBuffer);
-#else
     size_t certSize;
     ReturnErrorOnFailure(
         ATBMConfig::ReadConfigValueBin(ATBMConfig::kConfigKey_PAICert, outBuffer.data(), outBuffer.size(), certSize));
     outBuffer.reduce_size(certSize);
     return CHIP_NO_ERROR;
-#endif // CONFIG_ENABLE_SET_CERT_DECLARATION_API
 }
 
 CHIP_ERROR ATBMFactoryDataProvider::SignWithDeviceAttestationKey(const ByteSpan & messageToSign, MutableByteSpan & outSignBuffer)
