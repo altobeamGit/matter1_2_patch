@@ -52,12 +52,21 @@ config("includes") {
       "${chip_root}/src/platform/atbm",
       "${chip_root}/src/platform/atbm/common",
       "${chip_root}/src/platform/atbm/lwip/include",
-      "${chip_root}/third_party/freertos/repo/include",
+      "${chip_root}/src/platform/atbm/freertos/include",
+      "${chip_root}/src/platform/atbm/nimble",
+      "${chip_root}/src/platform/atbm/nimble/nimble/include",
+      "${chip_root}/src/platform/atbm/nimble/nimble/host/include",
+      "${chip_root}/src/platform/atbm/nimble/nimble/host/services/gap/include/services",
+      "${chip_root}/src/platform/atbm/nimble/nimble/host/services/gatt/include/services",
+      "${chip_root}/src/platform/atbm/nimble/nimble/host/util/include/host",
+      "${chip_root}/src/platform/atbm/nimble/porting/nimble/include",
+      "${chip_root}/src/platform/atbm/nimble/porting/npl/freertos/include",
       "${chip_root}/third_party/mbedtls/repo/include",
    ]
    defines += [
      "_GLIBCXX_USE_C99_STDIO=1",
      "_GLIBCXX_USE_C99_STDLIB=1",
+     "SUPPORT_MATTER",
      ]
   }
 }

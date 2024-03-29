@@ -111,24 +111,25 @@ typedef unsigned portLONG UBaseType_t;
 //#define portTICK_RATE_MS		( ( portTickType ) 1000 / configTICK_RATE_HZ )		
 #define portTICK_PERIOD_MS             ( ( portTickType ) 1000 / configTICK_RATE_HZ )
 #define portBYTE_ALIGNMENT		32
+#if( portBYTE_ALIGNMENT == 32 || portBYTE_ALIGNMENT == 16)
+	#define portBYTE_ALIGNMENT_MASK ( portBYTE_ALIGNMENT-1 )
+#endif
 
+void vTaskSwitchContext( void );
 #define portNOP()		__asm__ volatile ("nop");	//asm volatile ( "nop" );
 /*-----------------------------------------------------------*/	
 
 //#include "os_cpu.h"
+#include "hal.h"
 //extern OS_CPU_SR psw_1;
-
+extern void xPortStartFirstTask(void);
 /* Scheduler utilities. */
-#define portRESTORE_CONTEXT		CtxRestore		
-#define portSAVE_CONTEXT		CtxSave
+#define portRESTORE_CONTEXT		xPortStartFirstTask
+#define portRESTORE_FirstTask		xPortStartFirstTask
 
 void vPortYield();
 #define portYIELD()			vPortYield()
-#define portEND_SWITCHING_ISR(xSwitchRequired) \
-if(xSwitchRequired)						     \
-{ 					                         \
-   portYIELD();  	                         \
-}
+#define portEND_SWITCHING_ISR(xSwitchRequired)  if( xSwitchRequired ) vTaskSwitchContext()
 #define portYIELD_FROM_ISR(x)  portEND_SWITCHING_ISR(x)
 /* Critical section management. */
 

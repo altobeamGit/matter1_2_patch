@@ -17,7 +17,7 @@ import("//build_overrides/build.gni")
 import("${build_root}/toolchain/gcc_toolchain.gni")
 
 gcc_toolchain("freertos_andes_gcc") {
-  toolchain_prefix = "/usr/lchome/wangzhiguang/matter-1.2/connectedhomeip-ori/connectedhomeip/build/toolchain/nds32le-elf-mculib-v5/bin/riscv32-elf-"
+  toolchain_prefix = "/usr/lchome/wangzhiguang/matter1.2/connectedhomeip/build/toolchain/nds32le-elf-mculib-v5/bin/riscv32-elf-"
   cc = "${toolchain_prefix}gcc"
   cxx = "${toolchain_prefix}g++"
   ar = "${toolchain_prefix}ar"

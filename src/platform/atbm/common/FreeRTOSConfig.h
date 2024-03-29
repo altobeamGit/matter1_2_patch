@@ -95,6 +95,7 @@
 	#define configUSE_16_BIT_TICKS				0
 	#define configUSE_8_BIT_TICKS				0
 	#define configIDLE_SHOULD_YIELD				1
+	#define configUSE_TASK_NOTIFICATIONS		0
 	
 	/* Co-routine definitions. */
 	#define configUSE_CO_ROUTINES 				0
@@ -142,9 +143,6 @@
 //cpu useage add by wp
 #define configGENERATE_RUN_TIME_STATS 			1
 
-#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
-extern unsigned int HAL_TIME_US();
-#define portGET_RUN_TIME_COUNTER_VALUE HAL_TIME_US()
 
 /* For OS aware debugging */
 #define configQUEUE_REGISTRY_SIZE			10

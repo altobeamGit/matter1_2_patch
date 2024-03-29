@@ -23,15 +23,6 @@
 #include <app/server/Server.h>
 #include <platform/atbm/NetworkCommissioningDriver.h>
 
-//WZG NEW ADD
-#if CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE
-#if CONFIG_BT_ENABLED
-#if CONFIG_BT_NIMBLE_ENABLED
-
-#endif // CONFIG_BT_NIMBLE_ENABLED
-#endif // CONFIG_BT_ENABLED
-#endif // CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE
-
 using namespace chip;
 using namespace chip::Credentials;
 using namespace chip::DeviceLayer;
