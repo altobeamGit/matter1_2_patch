@@ -36,9 +36,10 @@
 #include <app/ConcreteAttributePath.h>
 #include <lib/support/logging/CHIPLogging.h>
 
+#if 0
 #include "LowPowerManager.h"
 #include "WakeOnLanManager.h"
-
+#endif
 #include "atbm_general.h"
 
 extern LEDWidget AppLED;
@@ -48,10 +49,12 @@ using namespace chip::Inet;
 using namespace chip::System;
 using namespace chip::app::Clusters;
 
+#if 0
 namespace {
 static LowPowerManager lowPowerManager;
 static WakeOnLanManager wakeOnLanManager;
 }
+#endif
 
 void AppDeviceCallbacks::PostAttributeChangeCallback(EndpointId endpointId, ClusterId clusterId, AttributeId attributeId,
                                                      uint8_t type, uint16_t size, uint8_t * value)
@@ -120,6 +123,7 @@ void emberAfOnOffClusterInitCallback(EndpointId endpoint)
     GetAppTask().UpdateClusterState();
 }
 
+#if 0
 void emberAfLowPowerClusterInitCallback(EndpointId endpoint)
 {
     ChipLogProgress(DeviceLayer, "emberAfLowPowerClusterInitCallback");
@@ -131,6 +135,7 @@ void emberAfWakeOnLanClusterInitCallback(EndpointId endpoint)
     ChipLogProgress(DeviceLayer, "emberAfWakeOnLanClusterInitCallback");
     WakeOnLan::SetDefaultDelegate(endpoint, &wakeOnLanManager);
 }
+#endif
 
 void AppDeviceCallbacksDelegate::OnIPv4ConnectivityEstablished()
 {
