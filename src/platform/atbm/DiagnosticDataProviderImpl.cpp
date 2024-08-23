@@ -167,7 +167,7 @@ CHIP_ERROR DiagnosticDataProviderImpl::GetNetworkInterfaces(NetworkInterface ** 
 
         uint8_t ipv6_addr_count = 0;
         ip6_addr_t ip6_addr[kMaxIPv6AddrCount];
-        ipv6_addr_count = netif_get_ip6_addr_match(netif, ip6_addr);
+        ipv6_addr_count = netif_get_ip6_addr(netif, ip6_addr);
         for (uint8_t idx = 0; idx < ipv6_addr_count; ++idx)
         {
             memcpy(ifp->Ipv6AddressesBuffer[idx], ip6_addr[idx].addr, kMaxIPv6AddrSize);
