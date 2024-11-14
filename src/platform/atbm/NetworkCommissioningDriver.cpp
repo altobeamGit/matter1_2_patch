@@ -311,7 +311,7 @@ void ATBMWiFiDriver::OnScanWiFiNetworkDone()
     }
 
     struct atbmwifi_scan_result *scan_result = atbm_wifi_scan_get_result();
-    if (scan_result == NULL)
+    if ((scan_result == NULL) || (scan_result->info == NULL))
     {
         ChipLogError(DeviceLayer, "can't get memory for ap_list_buffer");
         mpScanCallback->OnFinished(Status::kUnknownError, CharSpan(), nullptr);

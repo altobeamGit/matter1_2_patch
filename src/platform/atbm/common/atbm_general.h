@@ -57,14 +57,16 @@ struct atbmwifi_scan_result_info{
 	   wps:1,
 	   p2p:1,
 	   b40M:1,
-	   encrypt:1;
+	   encrypt:1,
+	   wpa3Only:1;
 	s8 rssi;
-#ifdef CONFIG_8266_AT_CMD
 	short pairwise_cipher;
 	short group_cipher;
-#else
-	short reserved[2];
-#endif
+	u8 parent_bssid[6];
+	u8 max_bssid_indicator;
+	u8 bssid_index;
+	u8 he:1,
+	   isNonTransBss:1;
 };
 
 struct atbmwifi_scan_result{
