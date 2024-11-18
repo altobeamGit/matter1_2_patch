@@ -586,8 +586,15 @@ CHIP_ERROR BLEManagerImpl::bleprph_set_random_addr(void)
 
 void BLEManagerImpl::bleprph_on_sync(void)
 {
-    ChipLogProgress(DeviceLayer, "BLE host-controller synced");
-    xSemaphoreGive(semaphoreHandle);
+    if (semaphoreHandle == NULL)
+    {
+        ChipLogProgress(DeviceLayer, "BLE host-controller sync semaphoreHandle is NULL");
+    }
+    else
+    {
+        ChipLogProgress(DeviceLayer, "BLE host-controller synced");
+        xSemaphoreGive(semaphoreHandle);
+    }
 }
 
 void BLEManagerImpl::bleprph_host_task(void * param)
